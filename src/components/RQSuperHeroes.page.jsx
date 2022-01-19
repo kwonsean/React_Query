@@ -11,6 +11,7 @@ export default function RQSuperHeroesPage() {
   console.log('results', results)
 
   if (results.isLoading) return <h2>Loading...</h2>
+  if (results.isError) return <h2>{results.error.message}</h2>
 
   return (
     <>
