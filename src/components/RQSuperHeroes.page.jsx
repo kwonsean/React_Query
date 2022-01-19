@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React from 'react'
 import { useQuery } from 'react-query'
+import { Link } from 'react-router-dom'
 
 const getAllSuperHeroes = () => {
   return axios.get('http://localhost:4000/superheroes')
@@ -27,10 +28,10 @@ export default function RQSuperHeroesPage() {
     onSuccess,
     onError,
     // !! select는 data를 필터링하여 원하는 값만 data에 들어가도록 한다. (return 값이 data에 들어감 지금은 이름만 들어감)
-    select: (data) => {
-      const superHeroNames = data.data.map((hero) => hero.name)
-      return superHeroNames
-    },
+    // select: (data) => {
+    //   const superHeroNames = data.data.map((hero) => hero.name)
+    //   return superHeroNames
+    // },
   })
 
   console.log('results', results)
@@ -43,12 +44,16 @@ export default function RQSuperHeroesPage() {
     <>
       <h2>RQSuperHeroesPage</h2>
       <button onClick={results.refetch}>Fetch heroes data</button>
-      {/* {results.isSuccess
-        ? results.data.data.map((hero) => <div key={hero.id}>{hero.name}</div>)
-        : null} */}
       {results.isSuccess
-        ? results.data.map((hero, index) => <div key={index}>{hero}</div>)
+        ? results.data.data.map((hero) => (
+            <div key={hero.id}>
+              <Link to={`/rq-super-heroes/${hero.id}`}>{hero.name}</Link>
+            </div>
+          ))
         : null}
+      {/* {results.isSuccess
+        ? results.data.map((hero, index) => <div key={index}>{hero}</div>)
+        : null} */}
     </>
   )
 }
