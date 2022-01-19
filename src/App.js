@@ -5,6 +5,7 @@ import './App.css'
 import HomePage from './components/Home.page'
 import RQSuperHeroesPage from './components/RQSuperHeroes.page'
 import SuperHeroesPage from './components/SuperHeroes.page'
+import RQActorNamePage from './components/RQActorName.page'
 
 const queryClient = new QueryClient()
 console.log(queryClient)
@@ -25,6 +26,9 @@ function App() {
               <li>
                 <Link to='/rq-super-heroes'>RQ Super Heroes</Link>
               </li>
+              <li>
+                <Link to='/rq-actor-name'>RQ Actor Name</Link>
+              </li>
             </ul>
           </nav>
           <Routes>
@@ -33,6 +37,7 @@ function App() {
               path='/rq-super-heroes'
               element={<RQSuperHeroesPage />}
             ></Route>
+            <Route path='/rq-actor-name' element={<RQActorNamePage />}></Route>
             <Route path='/' element={<HomePage />}></Route>
           </Routes>
         </div>
