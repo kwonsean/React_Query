@@ -1,10 +1,14 @@
 import axios from 'axios'
+import { request } from '../utils/axios-utils'
 import React, { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
 
 const getAllSuperHeroes = () => {
-  return axios.get('http://localhost:4000/superheroes')
+  // return axios.get('http://localhost:4000/superheroes')
+  const answerOfrequest = request({ url: '/superheroes' })
+  console.log('answerOfrequest', answerOfrequest)
+  return answerOfrequest
 }
 
 export default function RQSuperHeroesPage() {
@@ -36,9 +40,11 @@ export default function RQSuperHeroesPage() {
     //   return superHeroNames
     // },
   })
+  console.log('results type', typeof results, results)
 
   const addSuperHero = (hero) => {
-    return axios.post(`http://localhost:4000/superheroes`, hero)
+    // return axios.post(`http://localhost:4000/superheroes`, hero)
+    return request({ url: '/superheroes', method: 'post', data: hero })
   }
 
   // useMutation은 키가 필요없다.
