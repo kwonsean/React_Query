@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 
 const getAllSuperHeroes = (id) => {
   return axios.get(`http://localhost:4000/superheroes/${id}`)
@@ -18,5 +18,21 @@ const getAllSuperHeroesByKey = ({ queryKey }) => {
 // }
 
 export const useSuperHeroeAllData = (id) => {
-  return useQuery(['super-heroes', id], getAllSuperHeroesByKey) // 그냥 호출 후 쿼리 키로 값 받기(앞에 작성한 배열)
+  const queryClient = useQueryClient()
+  return useQuery(['super-heroes', id], getAllSuperHeroesByKey, {
+    // 그냥 호출 후 쿼리 키로 값 받기(앞에 작성한 배열)
+    // 초기값을 지정할 수 있다 이때 함수로 작성하고 return은 객체형태로 data가 담긴 상태 그래서 로딩없이 바로 보여준다. 이미 있으니깐
+    initialData: () => {
+      const hero = queryClient
+        .getQueryData('super-heroes')
+        ?.data?.find((hero) => hero.id === parseInt(id))
+      if (hero) {
+        return {
+          data: hero,
+        }
+      } else {
+        return undefined
+      }
+    },
+  })
 }
