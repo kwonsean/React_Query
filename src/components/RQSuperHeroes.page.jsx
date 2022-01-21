@@ -46,14 +46,40 @@ export default function RQSuperHeroesPage() {
     const queryClient = useQueryClient()
     return useMutation(addSuperHero, {
       // mutation이 성공하면 실행 (이전에 super-heroes키로 가져온 쿼리 업데이트)
-      onSuccess: (data) => {
-        // queryClient.invalidateQueries('super-heroes') // 통신을 한번 더함 (get함)
-        queryClient.setQueriesData('super-heroes', (oldQueryData) => {
+      // onSuccess: (data) => {
+      //   // queryClient.invalidateQueries('super-heroes') // 통신을 한번 더함 (get함)
+      //   queryClient.setQueriesData('super-heroes', (oldQueryData) => {
+      //     return {
+      //       ...oldQueryData,
+      //       data: [...oldQueryData.data, data.data],
+      //     }
+      //   })
+      // },
+
+      // 낙관적 처리 (Optimistic Update)
+      onMutate: async (newHero) => {
+        console.log('newHero', newHero)
+        await queryClient.cancelQueries('super-heroes')
+        const previousHeroData = queryClient.getQueryData('super-heroes')
+        queryClient.setQueryData('super-heroes', (oldQueryData) => {
+          console.log('oldQueryData', oldQueryData)
           return {
             ...oldQueryData,
-            data: [...oldQueryData.data, data.data],
+            data: [
+              ...oldQueryData.data,
+              { id: oldQueryData?.data?.length + 1, ...newHero },
+            ],
           }
         })
+        return {
+          previousHeroData,
+        }
+      },
+      onError: (_error, _hero, context) => {
+        queryClient.setQueryData('super-heroes', context.previousHeroData)
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries('super-heroes')
       },
     })
   }

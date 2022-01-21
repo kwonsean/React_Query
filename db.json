@@ -24,6 +24,31 @@
       "name": "TEST",
       "alterEgo": "TEST!!!",
       "id": 5
+    },
+    {
+      "name": "Aquaman",
+      "alterEgo": "Arthur",
+      "id": 6
+    },
+    {
+      "name": "what",
+      "alterEgo": "what",
+      "id": 7
+    },
+    {
+      "name": "hello",
+      "alterEgo": "hello~",
+      "id": 8
+    },
+    {
+      "name": "hi",
+      "alterEgo": "hi",
+      "id": 9
+    },
+    {
+      "name": "new",
+      "alterEgo": "new",
+      "id": 10
     }
   ],
   "friends": [
@@ -49,7 +74,11 @@
   "channels": [
     {
       "id": "KSH",
-      "contents": ["VLOG", "STUDY", "ASMR"]
+      "contents": [
+        "VLOG",
+        "STUDY",
+        "ASMR"
+      ]
     }
   ],
   "colors": [
