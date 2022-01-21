@@ -20,5 +20,17 @@
       "id": "KSH",
       "contents": ["VLOG", "STUDY", "ASMR"]
     }
+  ],
+  "colors": [
+    { "id": 1, "label": "red" },
+    { "id": 2, "label": "blue" },
+    { "id": 3, "label": "green" },
+    { "id": 4, "label": "yellow" },
+    { "id": 5, "label": "orange" },
+    { "id": 6, "label": "black" },
+    { "id": 7, "label": "white" },
+    { "id": 8, "label": "purple" },
+    { "id": 9, "label": "grey" },
+    { "id": 10, "label": "skyblue" }
   ]
 }
