@@ -8,5 +8,17 @@
     { "id": 1, "name": "KSH" },
     { "id": 2, "name": "KWON" },
     { "id": 3, "name": "PARK" }
+  ],
+  "users": [
+    {
+      "id": "ksh@naver.com",
+      "channelId": "KSH"
+    }
+  ],
+  "channels": [
+    {
+      "id": "KSH",
+      "contents": ["VLOG", "STUDY", "ASMR"]
+    }
   ]
 }
