@@ -1,6 +1,6 @@
 import axios from 'axios'
-import React from 'react'
-import { useQuery } from 'react-query'
+import React, { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
 
 const getAllSuperHeroes = () => {
@@ -8,6 +8,9 @@ const getAllSuperHeroes = () => {
 }
 
 export default function RQSuperHeroesPage() {
+  const [name, setName] = useState('')
+  const [alterEgo, setAlterEgo] = useState('')
+
   // 성공 or 실패 했을때 다음으로 호출할 함수를 지정 가능하다.
   const onSuccess = (data) => {
     console.log('Perfrom side effect after data fetching', data)
@@ -24,7 +27,7 @@ export default function RQSuperHeroesPage() {
     cacheTime: 1000 * 60,
     // refetchInterval: 2000, // 2초마다 refetch함 (기본값 false)
     // refetchIntervalInBackground: true
-    enabled: false,
+    // enabled: false,
     onSuccess,
     onError,
     // !! select는 data를 필터링하여 원하는 값만 data에 들어가도록 한다. (return 값이 data에 들어감 지금은 이름만 들어감)
@@ -34,15 +37,60 @@ export default function RQSuperHeroesPage() {
     // },
   })
 
+  const addSuperHero = (hero) => {
+    return axios.post(`http://localhost:4000/superheroes`, hero)
+  }
+
+  // useMutation은 키가 필요없다.
+  const useAddSuperHeroData = () => {
+    const queryClient = useQueryClient()
+    return useMutation(addSuperHero, {
+      // mutation이 성공하면 실행 (이전에 super-heroes키로 가져온 쿼리 업데이트)
+      onSuccess: (data) => {
+        // queryClient.invalidateQueries('super-heroes') // 통신을 한번 더함 (get함)
+        queryClient.setQueriesData('super-heroes', (oldQueryData) => {
+          return {
+            ...oldQueryData,
+            data: [...oldQueryData.data, data.data],
+          }
+        })
+      },
+    })
+  }
+
+  const { mutate: addHero } = useAddSuperHeroData()
+
   console.log('results', results)
   console.log('loading', results.isLoading, 'fetching', results.isFetching) // Loading은 한번 데이터를 가져오면 계속 fasle 반면 fetching은 매번 true로 바뀌었다 false로 바뀜
 
   if (results.isLoading || results.isFetching) return <h2>Loading...</h2>
   if (results.isError) return <h2>{results.error.message}</h2>
 
+  const handleAddHeroClick = () => {
+    console.log({ name, alterEgo })
+    const hero = { name, alterEgo }
+    console.log(addHero)
+    addHero(hero)
+  }
+
   return (
     <>
       <h2>RQSuperHeroesPage</h2>
+      <div>
+        <input
+          type='text'
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder='Set NAME'
+        ></input>
+        <input
+          type='text'
+          value={alterEgo}
+          onChange={(e) => setAlterEgo(e.target.value)}
+          placeholder='Set AlterEgo'
+        ></input>
+        <button onClick={handleAddHeroClick}>submit</button>
+      </div>
       <button onClick={results.refetch}>Fetch heroes data</button>
       {results.isSuccess
         ? results.data.data.map((hero) => (
